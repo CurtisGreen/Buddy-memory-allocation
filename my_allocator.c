@@ -28,7 +28,7 @@ unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length
 	head = (node*)linked_list;
 	free_head = (free_node*)(free_list+(numHeader-1)*20);
 	free_node* p = free_head;
-	free_node* free_tail = free_head;
+	//free_node* free_tail = free_head;
 	p->size = C;
 	for (int i =0; i < numHeaders-1; ++i) {	//Free list
 		p = free_head-1;
@@ -36,7 +36,7 @@ unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length
 		p->size = p->next->size*2;
 		free_head = p;
 	}
-	free_tail->down = head;	//I changed it so it goes [smallest]->[]->[]->[biggest]
+	free_head->down = head;	
 }	
 
 //my_malloc(129);
