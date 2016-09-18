@@ -41,7 +41,7 @@ unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length
 
 //my_malloc(129);
 extern Addr my_malloc(unsigned int _length) {
-	if (_length <= 16+M){	//Verify that the block can fit
+	if (_length+16 <= M){	//Verify that the block can fit
 	    //search free list
 	    free_node* p = free_head;
 	    if (_length <= 16+C){	//Use smallest block
@@ -54,8 +54,16 @@ extern Addr my_malloc(unsigned int _length) {
 	    	while (_length+16 < p->size && _length+16 <= p->next->size){
 	    		p = p->next;
 	    	}
-	    	//Check for availability of block
-	    	//return block or split blocks & remove from free list
+	    	if (p->down != NULL){	//Check if there is a node here
+	    	    ret_node = p->down;
+	    	    p->down = p->down->next;    //Set to next down node
+	    	    return ret_node;
+	    	}
+	    	else{	//No node of this size
+	    	    //Go back up and see if there are larger ones
+	    	    //If there are, split them and use one
+	    	    //If not, keep going up until you reach the largest block, if that is not there then print "no space"
+	    	}
 	    }
 	}
 	else{
@@ -63,7 +71,7 @@ extern Addr my_malloc(unsigned int _length) {
 	}
 	
 	
-  return malloc((size_t)_length); // returning char pointer
+  //return malloc((size_t)_length); // returning char pointer
 }
 
 // back to orginal memory + merge -_-
