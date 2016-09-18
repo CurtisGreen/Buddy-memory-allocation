@@ -48,7 +48,12 @@ extern Addr my_malloc(unsigned int _length) {
 	    	
 	    }
 	    else if (_length >= (M/2)+16){    //Use biggest block
-	    	
+	    	if (p->down != NULL){
+	    	  
+	    	}
+	    	else{    //No free space
+	    	    printf("Not enough space in memory")	
+	    	}
 	    }
 	    else{    //Use middle blocks
 	    	while (_length+16 < p->size && _length+16 <= p->next->size){
@@ -57,7 +62,7 @@ extern Addr my_malloc(unsigned int _length) {
 	    	if (p->down != NULL){	//Check if there is a node here
 	    	    ret_node = p->down;
 	    	    p->down = p->down->next;    //Set to next down node
-	    	    return ret_node;
+	    	    return (char*)ret_node;
 	    	}
 	    	else{	//No node of this size
 	    	    //Go back up and see if there are larger ones
