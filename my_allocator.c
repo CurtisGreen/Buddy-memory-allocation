@@ -45,11 +45,11 @@ extern Addr my_malloc(unsigned int _length) {
 	    //search free list
 	    free_node* p = free_head;
 	    if (_length <= 16+C){	//Use smallest block
-	    	
+	    	//TODO
 	    }
 	    else if (_length >= (M/2)+16){    //Use biggest block
 	    	if (p->down != NULL){
-	    	  
+	    	  //TODO
 	    	}
 	    	else{    //No free space
 	    	    printf("Not enough space in memory")	
@@ -62,7 +62,7 @@ extern Addr my_malloc(unsigned int _length) {
 	    	if (p->down != NULL){	//Check if there is a node here
 	    	    ret_node = p->down;
 	    	    p->down = p->down->next;    //Set to next down node
-	    	    return (char*)ret_node;
+	    	    return (char*)ret_node;	//TODO: probably needs to be 16 bits afterward so it points after the header
 	    	}
 	    	else{	//No node of this size
 	    	    //Go back up and see if there are larger ones
@@ -81,11 +81,12 @@ extern Addr my_malloc(unsigned int _length) {
 
 // back to orginal memory + merge -_-
 int release_allocator(){
-	
+    //TODO: call my_free
 }
 
 extern int my_free(Addr _a) {
   /* Same here! */
+  //TODO: 
   free(_a);
   return 0;
 }
