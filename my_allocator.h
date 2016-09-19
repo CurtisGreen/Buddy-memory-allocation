@@ -30,7 +30,7 @@ typedef struct node {
 	int key;
 	int node_size;
 	struct node* next;
-} new_node;
+} new_node;	//Not sure if needed
 
 typedef struct free_node{
 	int size;
