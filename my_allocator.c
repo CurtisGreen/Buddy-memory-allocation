@@ -53,11 +53,16 @@ char* split(free_node* p){
 				node* buddy1 = p->down;
 				buddy1->size = p->size;
 				node* buddy2 = (node*)((char*)p->down+p->size/2);
+				buddy1->free = true;
+				buddy2->free = true;
 				p->down = buddy1;
 				p = p->next;
 				p->down = buddy2;
 			}
-			return (char*)p->down;
+			node* ret_node = p->down;
+			p->down = p->down->next;    //Set to next down node
+			ret_node->free = false;
+			return (char*)ret_node + 16;
 		}
 		else{
 			temp_size = temp_size*2;
@@ -78,6 +83,7 @@ extern Addr my_malloc(unsigned int _length) {
 			if (p->down != NULL){	//Free node exists
 				node* ret_node = p->down;
 	    	    p->down = p->down->next;    //Set to next down node
+				ret_node->free = false;
 	    	    return (char*)ret_node + 16;
 			}
 			else{
@@ -88,7 +94,8 @@ extern Addr my_malloc(unsigned int _length) {
 	    	if (p->down != NULL){	//Free node exists
 				node* ret_node = p->down;
 	    	    p->down = p->down->next;    //Set to next down node
-	    	    return (char*)ret_node + 16;
+	    	    ret_node->free = false;
+				return (char*)ret_node + 16;
 	    	}
 	    	else{    //No free space
 	    	    printf("Not enough space in memory");
@@ -102,6 +109,7 @@ extern Addr my_malloc(unsigned int _length) {
 			if (p->down != NULL){	//Check if there is a node here
 				node* ret_node = p->down;
 				p->down = p->down->next;    //Set to next down node
+				ret_node->free = false;
 				return (char*)ret_node + 16;
 			}
 			else{
@@ -119,14 +127,16 @@ extern Addr my_malloc(unsigned int _length) {
 
 // back to orginal memory + merge -_-
 int release_allocator(){
-    //TODO: call my_free
+    //TODO: call free and make sure no more operations are allowed to be done
+	return 0;
 }
 
 extern int my_free(Addr _a) {
-  /* Same here! */
-  //TODO: 
-  
-  free(_a);
+  //assign pointer to given address
+  //check if its buddy is free, find the buddy address using xor (and possibly bit shift>>) on the given address
+  //If it's free, combine it and call my_free() using this new block (this recursively combines blocks)
+  //If it's not free, just make the header point to it (make sure that if the header is already pointing to an object, use that object's next pointer)
+  //Assign that block as free
   return 0;
 }
 
