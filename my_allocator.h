@@ -27,16 +27,16 @@
 
 
 typedef struct node {
-	int key;
-	int node_size;
+	int size;
 	struct node* next;
+	bool free;
 } new_node;	//Not sure if needed
 
 typedef struct free_node{
 	int size;
 	struct free_node* next;
 	struct node* down;	//Pointer to free nodes
-}
+};
 /*--------------------------------------------------------------------------*/
 /* DATA STRUCTURES */ 
 /*--------------------------------------------------------------------------*/
