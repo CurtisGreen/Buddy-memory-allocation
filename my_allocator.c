@@ -62,7 +62,7 @@ extern Addr my_malloc(unsigned int _length) {
 	    	if (p->down != NULL){	//Check if there is a node here
 	    	    ret_node = p->down;
 	    	    p->down = p->down->next;    //Set to next down node
-	    	    return (char*)ret_node;	//TODO: probably needs to be 16 bits afterward so it points after the header
+	    	    return (char*)ret_node + 16;	//TODO: probably needs to be 16 bits afterward so it points after the header
 	    	}
 	    	else{	//No node of this size
 	    	    //Go back up and see if there are larger ones
