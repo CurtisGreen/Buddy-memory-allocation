@@ -33,8 +33,10 @@ int main(int argc, char ** argv) {
 	cout <<"hi"<<endl;
 	init_allocator(1024,64);
 	
-	A = my_malloc(100);
-	cout << A << endl;
+	A = my_malloc(20);
+	B = my_malloc(20);
+	cout << "A address: " << A << endl;
+	cout << "B address: " << B << endl;
   // input parameters (basic block size, memory length)
 
   // init_allocator(basic block size, memory length)
