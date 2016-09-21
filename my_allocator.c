@@ -109,7 +109,8 @@ extern Addr my_malloc(unsigned int _length) {
 	    	    return (char*)ret_node + 16;
 			}
 			else{
-				// I think it needs to go <else if> or <if>, since we are not allowed to split 64KB(min) ?_?
+				// I think it needs to go <else statment> to find somewhere in the middle block,
+				// since we are not allowed to split 64KB(min) ?_?
 				//return split(p);
 			}
 	    }
