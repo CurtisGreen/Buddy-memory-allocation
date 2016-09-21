@@ -78,7 +78,7 @@ extern Addr my_malloc(unsigned int _length) {
 	    //search free list
 	    free_node* p = free_head;
 	    if (_length <= 16+C){	//Use smallest block
-	    	while (p){
+	    	while (p->next!= NULL){ 								// seg
 				p = p->next;
 			}
 			if (p->down != NULL){	//Free node exists
