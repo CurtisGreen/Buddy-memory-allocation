@@ -30,10 +30,11 @@ int main(int argc, char ** argv) {
 				break;
 		}
 	}
-	cout <<"hi"<<endl;
+	cout <<"initialize"<<endl;
 	init_allocator(1024,64);
-	
+	cout <<"allocate 20"<<endl;
 	A = my_malloc(20);
+	cout <<"allocate 20"<<endl;
 	B = my_malloc(20);
 	cout << "A address: " << A << endl;
 	cout << "B address: " << B << endl;

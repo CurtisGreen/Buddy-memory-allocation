@@ -32,7 +32,7 @@ unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length
 	//free_node* free_tail = free_head;
 	p->size = C;
 	// if we do not set the down node, it down node will be NULL all the time  ... ?_? 
-	for (int i =0; i < numHeaders-1; ++i) {	//Free list // 0,1,2,3
+	/*for (int i =0; i < numHeaders-1; ++i) {	//Free list // 0,1,2,3
 		char* temp1 = (char*)malloc(16);				// when i = 0, temp1,temp2->size = 64
 		char* temp2 = (char*)malloc(16);				// (0,64),(1,128)(2,256)(3,512) 
 		node* buddy1 = (node*)temp1;					// 
@@ -47,8 +47,8 @@ unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length
 		p->size = p->next->size*2;								
 		free_head = p;
 		
-	}
-	/*
+	}*/
+	
 	for (int i =0; i < numHeaders-1; ++i) {	//Free list
 		p = free_head-20;	//Might be wrong
 		p->next = free_head;
@@ -57,7 +57,7 @@ unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length
 		/* I think we need to insert two nodes here undert p, 
 		if we do not insert two nodes, then p->down node is always null*/
 	}
-	*/
+
 	free_head->down = head;	
 }	
 
@@ -66,26 +66,33 @@ char* split(free_node* p){
 	int temp_size = p->size;
 	free_node* search = free_head;
 	while (temp_size < M){	//might need to be <=
+		search = free_head;
+		cout << "Within split, temp_size = " << temp_size << endl;
 		while (search->next->size != temp_size){	//Might need to be search->size
 			search = search->next;
 		}
-		if (p->down != NULL){	//Free node exists
-			while (p->size != original){	//Run until reach original block
-				node* buddy1 = p->down;
-				buddy1->size = p->size;
-				node* buddy2 = (node*)((char*)p->down+p->size/2);
+		cout << search->size << endl;
+		cout << "found next largest branch" << endl;
+		if (search->down != NULL){	//Free node exists
+			cout << "found free nodes" << endl;
+			while (search->size != original){	//Run until reach original block
+				node* buddy1 = search->down;
+				buddy1->size = search->size;
+				node* buddy2 = (node*)((char*)search->down+search->size/2);
+				cout << "Buddy 1 address = " << &(buddy1) << " buddy 2 address = " << &(buddy2) << endl;
 				buddy1->free = true;
 				buddy2->free = true;
-				p->down = buddy1;
-				p = p->next;
-				p->down = buddy2;
+				search->down = buddy1;
+				search = search->next;
+				search->down = buddy2;
 			}
-			node* ret_node = p->down;
-			p->down = p->down->next;    //Set to next down node
+			node* ret_node = search->down;
+			search->down = search->down->next;    //Set to next down node
 			ret_node->free = false;
 			return (char*)ret_node + 16;
 		}
 		else{
+			cout << "no free nodes here" << endl;
 			temp_size = temp_size*2;
 		}
 	}
@@ -94,14 +101,15 @@ char* split(free_node* p){
 
 //my_malloc(129);
 extern Addr my_malloc(unsigned int _length) {
-
 	if (_length+16 <= M){	//Verify that the block can fit
 	    //search free list
 	    free_node* p = free_head;
 	    if (_length <= 16+C){	//Use smallest block
+	    	cout << "inside smallest bracket" << endl;
 	    	while (p->next!= NULL){ 				     // if next is null, escape, it is at the end of block
 				p = p->next;
 			}
+			cout << "got to smallest node" << endl;
 			if (p->down != NULL){	//Free node exists
 				node* ret_node = p->down;
 	    	    p->down = p->down->next;    //Set to next down node
@@ -109,7 +117,7 @@ extern Addr my_malloc(unsigned int _length) {
 	    	    return (char*)ret_node + 16;
 			}
 			else{
-				
+				cout << "No free nodes" << endl;
 				return split(p);
 			}
 	    }
