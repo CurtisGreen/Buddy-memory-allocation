@@ -73,7 +73,7 @@ char* split(free_node* p){
 
 //my_malloc(129);
 extern Addr my_malloc(unsigned int _length) {
-	int _length = _length; // segmentation fault -> take _length as int
+
 	if (_length+16 <= M){	//Verify that the block can fit
 	    //search free list
 	    free_node* p = free_head;
