@@ -32,10 +32,12 @@ unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length
 	//free_node* free_tail = free_head;
 	p->size = C;
 	for (int i =0; i < numHeaders-1; ++i) {	//Free list
-		p = free_head-1;	//Might be wrong
+		p = free_head-20;	//Might be wrong
 		p->next = free_head;
 		p->size = p->next->size*2;
 		free_head = p;
+		/* I think we need to insert two nodes here undert p, 
+		if we do not insert two nodes, then p->down node is always null*/
 	}
 	free_head->down = head;	
 }	
