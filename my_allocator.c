@@ -31,6 +31,24 @@ unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length
 	free_node* p = free_head;
 	//free_node* free_tail = free_head;
 	p->size = C;
+	// if we do not set the down node, it down node will be NULL all the time  ... ?_? 
+	for (int i =0; i < numHeaders-1; ++i) {	//Free list // 0,1,2,3
+		char* temp1 = (char*)malloc(16);				// when i = 0, temp1,temp2->size = 64
+		char* temp2 = (char*)malloc(16);				// (0,64),(1,128)(2,256)(3,512) 
+		node* buddy1 = (node*)temp1;					// 
+		node* buddy2 = (node*)temp2;
+		buddy1->size = p->size;
+		buddy2->size = p->size;
+		p->down = buddy1;
+		buddy1->next = buddy2;
+		buddy2->next = NULL;
+		p = free_head-20;	
+		p->next = free_head; 
+		p->size = p->next->size*2;								
+		free_head = p;
+		
+	}
+	/*
 	for (int i =0; i < numHeaders-1; ++i) {	//Free list
 		p = free_head-20;	//Might be wrong
 		p->next = free_head;
@@ -39,6 +57,7 @@ unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length
 		/* I think we need to insert two nodes here undert p, 
 		if we do not insert two nodes, then p->down node is always null*/
 	}
+	*/
 	free_head->down = head;	
 }	
 
