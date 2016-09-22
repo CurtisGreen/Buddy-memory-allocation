@@ -38,6 +38,20 @@ int main(int argc, char ** argv) {
 	B = my_malloc(20);
 	cout << "A address: " << A << endl;
 	cout << "B address: " << B << endl;
+	
+	
+	
+	int i = 16;
+	std::ostringstream os;
+	os << std::hex <<  i;
+	string k = os.str();
+	//cout << k << os.str();
+	i = atoi((k).c_str());
+	cout << i << endl;
+
+	int m = 0;
+	m = i ^ (int)C;
+	cout << "xor: " << m;
   // input parameters (basic block size, memory length)
 
   // init_allocator(basic block size, memory length)
