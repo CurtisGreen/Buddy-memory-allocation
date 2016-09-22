@@ -67,14 +67,12 @@ char* split(free_node* p){
 	free_node* search = free_head;
 	while (temp_size < M){	//might need to be <=
 		search = free_head;
-		cout << "Within split, temp_size = " << temp_size << endl;
 		while (search->next->size != temp_size){	//Might need to be search->size
 			search = search->next;
 		}
 		cout << search->size << endl;
-		cout << "found next largest branch" << endl;
 		if (search->down != NULL){	//Free node exists
-			cout << "found free nodes" << endl;
+			cout << "search size = " << search->size << ", target = " << original << endl;
 			while (search->size != original){	//Run until reach original block
 				node* buddy1 = search->down;
 				buddy1->size = search->size;
@@ -82,6 +80,8 @@ char* split(free_node* p){
 				cout << "Buddy 1 address = " << &(buddy1) << " buddy 2 address = " << &(buddy2) << endl;
 				buddy1->free = true;
 				buddy2->free = true;
+				search->down = search->down->next;
+				search = search->next;
 				search->down = buddy1;
 				search = search->next;
 				search->down = buddy2;
@@ -92,7 +92,6 @@ char* split(free_node* p){
 			return (char*)ret_node + 16;
 		}
 		else{
-			cout << "no free nodes here" << endl;
 			temp_size = temp_size*2;
 		}
 	}
