@@ -156,7 +156,7 @@ extern Addr my_malloc(unsigned int _length) {
 
 
 
-// back to orginal memory + merge -_-
+
 int release_allocator(){
     //TODO: call free and make sure no more operations are allowed to be done
 	return 0;
