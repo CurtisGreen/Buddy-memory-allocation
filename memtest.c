@@ -8,6 +8,60 @@
 
 using namespace std;
 
+/*
+
+
+int ackerman(int a, int b) {
+/* This is the implementation of the Ackerman function. The function itself is very
+   function is very simple (just two recursive calls). We use it to exercise the
+   memory allocator (see "my_alloc" and "my_free"). 
+   For this, there are additional calls to "gettimeofday" to measure the elapsed
+   time.
+ */
+ 
+/*
+  void * mem;
+
+  int to_alloc =  ((2 << (rand() % 19)) * (rand() % 100)) / 100;
+  if  (to_alloc < 4) to_alloc = 4;
+
+  int result = 0, i;
+
+  char c;
+
+  mem = my_malloc(to_alloc * sizeof(char));
+
+  num_allocations++;
+
+  if (mem != NULL) {
+
+    // generate a random byte to fulfill the allocated block of memory
+    c = rand() % 128;
+    memset(mem, c, to_alloc * sizeof(char));
+
+    if (a == 0)
+      result = b + 1;
+    else if (b == 0)
+      result = ackerman(a - 1, 1);
+    else
+      result = ackerman(a - 1, ackerman(a, b - 1) );
+
+    // check memory value before deleting
+    for (i = 0; i < to_alloc; i++) {
+        if (((char*)mem)[i] != c) {
+            printf("Memory checking error!\n");
+            break;
+        }
+    }
+
+    my_free(mem);
+  }
+
+  return result;
+}
+*/
+
+
 int main(int argc, char ** argv) {
 
 	int c;
