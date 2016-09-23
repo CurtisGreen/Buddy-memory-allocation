@@ -157,7 +157,7 @@ int release_allocator(){
 extern int my_free(Addr _a) {
   void* buddy = ((void*)(((unsigned long)(_a))^(((node*)(_a-16))->size))-16);
   cout << "its buddy = " << ((void*)(((unsigned long)(_a))^(((node*)(_a-16))->size))-16)<<endl;
-// check (buddy->free) ?	
+// check ((node*)buddy->free) ? +16 ?_?	
   //assign pointer to given address
   //check if its buddy is free, find the buddy address using xor (and possibly bit shift>>) on the given address
   //If it's free, combine it and call my_free() using this new block (this recursively combines blocks)
