@@ -87,6 +87,7 @@ int main(int argc, char ** argv) {
 				M = atoi(optarg);
 				break;
 		}
+		//ackerman()
 	}
 	cout <<"initialize"<<endl;
 	init_allocator(1024,64);
