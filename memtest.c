@@ -66,6 +66,12 @@ int main(int argc, char ** argv) {
 	void * C;
 	void * D;
 	
+	cout << "---- test case----" << endl;
+	cout << "bbs=128, m = 128MB" << endl;
+	cout << "(3,6)(3,8)(1,x)(2,x)(3,x)(3,7)(3,8) << endl; 
+
+	
+	
 	// their getopt() code, keep intact
 	while ((c = getopt(argc, argv, "bs:")) != -1){
 		switch (c){
