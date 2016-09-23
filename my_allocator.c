@@ -46,6 +46,7 @@ unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length
 	free_head->down = head;
 	head->size = 1024;
 	head->free = true;
+	cout << "succesfully initialized" << endl;
 }	
 
 char* split(free_node* p){
@@ -160,33 +161,66 @@ extern int my_free(Addr _a) {
   cout << endl << "----my_free function------" << endl;
   node* it = (node*)(_a-16);
   node* buddy = (node*)((void*)(((unsigned long)(_a))^(((node*)(_a-16))->size))-16); 
-  
+  /*
   cout << "its size   : " << (int)((it)->size) << endl;
   cout << "its memory : " << _a-16 << endl;
   cout << "its buddy  : " << buddy <<endl;
   cout << "buddy size?: " << (int)((buddy)->size) << endl;
   cout << "buddy free?: " << (bool)((buddy)->free) << endl;
-  
+  */
   if ((bool)((buddy)->free)) { // // find its double size move pointer + free=1 + combine
+	//cout << "buddy is free" << endl;
 	free_node* search = free_head;
 	while (search->next->size != (int)((it)->size) ){	
 			search = search->next;
 	}
-	(it->next) = buddy;
-	search->down = it;
-	it->free = 1;
-  }
-  else { 
-	free_node* search = free_head;
-	node* node_search;
-	while (search->next->size != (int)((it)->size) ){	
-			search = search->next;
+	//cout << "found header" << endl;
+	if (it < buddy){
+		it->size = it->size*2;
+		//cout << "buddy is first" << endl;
 	}
-	node_search = search->down;
+	else{
+		buddy->size = buddy->size*2;
+		it = buddy;
+		//cout << "buddy second" << endl;
+	}
+	node* node_search = search->down;
 	while(node_search != NULL){
 		node_search = node_search->next;
 	}
-	node_search->next = it;
+	if (node_search != NULL){
+		node_search->next = it;
+	}
+	else{
+		search->down = it;
+	}
+	search->next->down = search->next->down->next;
+	it->free = true;
+	it->next = NULL;
+	my_free(((char*)it+16));
+	
+  }
+  else { 
+	//cout << "node is not free" << endl;
+	free_node* search = free_head;
+	node* node_search;
+	while (search->size != ((it)->size) ){	
+		search = search->next;
+	}
+	//cout << "found header" << endl;
+	node_search = search->down;
+	cout << search->size << endl;
+	while(node_search != NULL){
+		node_search = node_search->next;
+	}
+	if (node_search != NULL){
+		node_search->next = it;
+	}
+	else{
+		search->down = it;
+	}
+	//search->next->down = search->next->down->next;
+	//cout << "found final node" << endl;
 	it->free = true;
 	it->next = NULL;
   }

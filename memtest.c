@@ -5,26 +5,27 @@
 #include <iostream>
 #include <cstring> //memset
 #include "my_allocator.h"
+#include "ackerman.h"
 
 using namespace std;
-
+/*
 unsigned long int num_allocations;
 int ackerman(int a, int b) {
-/* This is the implementation of the Ackerman function. The function itself is very
+ This is the implementation of the Ackerman function. The function itself is very
    function is very simple (just two recursive calls). We use it to exercise the
    memory allocator (see "my_alloc" and "my_free"). 
    For this, there are additional calls to "gettimeofday" to measure the elapsed
    time.
- */
- cout << " ?_? " << endl;
+ 
+ //cout << " ?_? " << endl;
   void * mem;
 
-  /* The size "to_alloc" of the region to allocate is computed randomly: */
+  //The size "to_alloc" of the region to allocate is computed randomly: 
   int to_alloc =  ((2 << (rand() % 19)) * (rand() % 100)) / 100;
   if  (to_alloc < 4) to_alloc = 4;
 
   int result = 0, i;
- cout << " ?_? " << endl;
+ //cout << " ?_? " << endl;
   char c;
 
   mem = my_malloc(to_alloc * sizeof(char));
@@ -32,7 +33,7 @@ int ackerman(int a, int b) {
   num_allocations++;
 
   if (mem != NULL) {
- cout << " ?_? " << endl;
+ //cout << " ?_? " << endl;
     // generate a random byte to fulfill the allocated block of memory
     c = rand() % 128;
     memset(mem, c, to_alloc * sizeof(char));
@@ -51,12 +52,12 @@ int ackerman(int a, int b) {
             break;
         }
     }
- cout << " ?_? " << endl;
+ //cout << " ?_? " << endl;
     my_free(mem);
   }
 
   return result;
-}
+}*/
 
 
 int main(int argc, char ** argv) {
@@ -78,7 +79,7 @@ int main(int argc, char ** argv) {
 	*/
 	cout <<"initialize"<<endl;
 	init_allocator(1024,64);
-	printlist();
+	/*printlist();
 	cout <<"allocate 20"<<endl;
 	A = my_malloc(20);
 
@@ -100,7 +101,9 @@ int main(int argc, char ** argv) {
 
 
 	my_free(A);
+	printlist();
 	my_free(B);
+	printlist();*/
 
 	//cout << "B buddy free = " << ((node*)(B-16))->free << endl;
 
@@ -109,7 +112,7 @@ int main(int argc, char ** argv) {
 
   // init_allocator(basic block size, memory length)
 
-  //ackerman_main();
+  ackerman_main();
 
-  // release_allocator()
+  release_allocator();
 }
