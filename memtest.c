@@ -53,20 +53,11 @@ int main(int argc, char ** argv) {
 	//cout << "B buddy = " << ((void*)(((unsigned long)(B))^(((node*)(B-16))->size))-16)<<endl;
 
 
-
+	my_free(A);
+	my_free(B);
 
 	//cout << "B buddy free = " << ((node*)(B-16))->free << endl;
-	/*int i = 16;
-	std::ostringstream os;
-	os << std::hex <<  i;
-	string k = os.str();
-	//cout << k << os.str();
-	i = atoi((k).c_str());
-	cout << i << endl;
 
-	int m = 0;
-	m = i ^ (int)C;
-	cout << "xor: " << m;*/
 
   // input parameters (basic block size, memory length)
 
