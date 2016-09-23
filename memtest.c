@@ -3,14 +3,12 @@
 #include <string>
 #include <getopt.h>
 #include <iostream>
-
+#include <cstring> //memset
 #include "my_allocator.h"
 
 using namespace std;
 
-/*
-
-
+unsigned long int num_allocations;
 int ackerman(int a, int b) {
 /* This is the implementation of the Ackerman function. The function itself is very
    function is very simple (just two recursive calls). We use it to exercise the
@@ -18,15 +16,15 @@ int ackerman(int a, int b) {
    For this, there are additional calls to "gettimeofday" to measure the elapsed
    time.
  */
- 
-/*
+ cout << " ?_? " << endl;
   void * mem;
 
+  /* The size "to_alloc" of the region to allocate is computed randomly: */
   int to_alloc =  ((2 << (rand() % 19)) * (rand() % 100)) / 100;
   if  (to_alloc < 4) to_alloc = 4;
 
   int result = 0, i;
-
+ cout << " ?_? " << endl;
   char c;
 
   mem = my_malloc(to_alloc * sizeof(char));
@@ -34,7 +32,7 @@ int ackerman(int a, int b) {
   num_allocations++;
 
   if (mem != NULL) {
-
+ cout << " ?_? " << endl;
     // generate a random byte to fulfill the allocated block of memory
     c = rand() % 128;
     memset(mem, c, to_alloc * sizeof(char));
@@ -53,13 +51,12 @@ int ackerman(int a, int b) {
             break;
         }
     }
-
+ cout << " ?_? " << endl;
     my_free(mem);
   }
 
   return result;
 }
-*/
 
 
 int main(int argc, char ** argv) {
@@ -71,19 +68,14 @@ int main(int argc, char ** argv) {
 	void * B;
 	void * C;
 	void * D;
-	
-	// their getopt() code, keep intact
-	
-	while ((c = getopt(argc, argv, "bs:")) != -1){
-		switch (c){
-			case 'b':
-				b = atoi(optarg);
-				break;
-			case 's':
-				M = atoi(optarg);
-				break;
-		}
-	}
+	/* by ackerman, we have segmentation fault 
+	   i copied it from ackerman.cpp (given source code)
+	cout << "M value: ";
+	cin >> M;
+	cout << "b value: ";
+	cin >> b;
+	ackerman(M, b);
+	*/
 	cout <<"initialize"<<endl;
 	init_allocator(1024,64);
 	printlist();
