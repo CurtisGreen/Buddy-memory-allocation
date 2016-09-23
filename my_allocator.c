@@ -164,7 +164,7 @@ extern int my_free(Addr _a) {
 }
 
 void printlist(){
-	cout << "~_~)b thx Curtis can i get you coffee bribe? "<< endl
+	cout << "~_~)b thx Curtis can i get you coffee bribe? "<< endl;
 	cout << "\nPrinting list\n" << endl;
 	free_node* free_head_temp = free_head;
 	node* node_temp;
