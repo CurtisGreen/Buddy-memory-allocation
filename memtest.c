@@ -77,6 +77,17 @@ int main(int argc, char ** argv) {
 	cin >> b;
 	ackerman(M, b);
 	*/
+	
+	while ((c = getopt(argc, argv, "bs:")) != -1){
+		switch (c){
+			case 'b':
+				b = atoi(optarg);
+				break;
+			case 's':
+				M = atoi(optarg);
+				break;
+		}
+	}
 	cout <<"initialize"<<endl;
 	init_allocator(1024,64);
 	/*printlist();
