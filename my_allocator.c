@@ -143,6 +143,7 @@ extern Addr my_malloc(unsigned int _length) {
 	}
 	else{
 	    printf("The length provided is too large to store data in");
+	    return NULL; // hoho
 	}
 }
 
