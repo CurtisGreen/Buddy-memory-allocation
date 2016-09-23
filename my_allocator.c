@@ -155,8 +155,10 @@ int release_allocator(){
 }
 
 extern int my_free(Addr _a) {
-  void* buddy = ((void*)(((unsigned long)(_a))^(((node*)(_a-16))->size))-16);
-  cout << "its buddy = " << ((void*)(((unsigned long)(_a))^(((node*)(_a-16))->size))-16)<<endl;
+cout << endl << "----my_free function------" << endl;
+  node* buddy = (node*)((void*)(((unsigned long)(_a))^(((node*)(_a-16))->size))-16);
+  cout << "its buddy = " << buddy <<endl;
+  cout << (node*)(buddy-16)->size << endl; // wrong place -_-
 // check ((node*)buddy->free) ?  ?_? buddy-16?	
   //assign pointer to given address
   //check if its buddy is free, find the buddy address using xor (and possibly bit shift>>) on the given address
