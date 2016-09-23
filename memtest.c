@@ -8,7 +8,7 @@
 #include "ackerman.h"
 
 using namespace std;
-/*
+/
 unsigned long int num_allocations;
 int ackerman(int a, int b) {
  This is the implementation of the Ackerman function. The function itself is very
@@ -52,8 +52,8 @@ int ackerman(int a, int b) {
             break;
         }
     }
- //cout << " ?_? " << endl;
-    my_free(mem);
+
+    //  my_free(mem); I do not know proper place for it... we have bus error
   }
 
   return result;
@@ -61,7 +61,7 @@ int ackerman(int a, int b) {
 
 
 int main(int argc, char ** argv) {
-
+	int a,b;
 	int c;
 	int b = 128;	 // block size = 2^9
 	int M = b * 12;  // mem size = 512kB = 2^10 * 2^7 // so we have space for 12 items
@@ -69,15 +69,14 @@ int main(int argc, char ** argv) {
 	void * B;
 	void * C;
 	void * D;
-	/* by ackerman, we have segmentation fault 
-	   i copied it from ackerman.cpp (given source code)
-	cout << "M value: ";
-	cin >> M;
-	cout << "b value: ";
+
+	cout << "a value(type 3): ";
+	cin >> a;
+	cout << "b value(type 6): ";
 	cin >> b;
-	ackerman(M, b);
-	*/
+	ackerman(a, b);
 	
+	/*
 	while ((c = getopt(argc, argv, "bs:")) != -1){
 		switch (c){
 			case 'b':
@@ -87,8 +86,9 @@ int main(int argc, char ** argv) {
 				M = atoi(optarg);
 				break;
 		}
-		//ackerman()
+		//ackerman()?
 	}
+	*/
 	cout <<"initialize"<<endl;
 	init_allocator(1024,64);
 	/*printlist();
