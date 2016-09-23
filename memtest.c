@@ -4,12 +4,32 @@
 #include <getopt.h>
 #include <iostream>
 #include <cstring> //memset
+#include<assert.h> //assert
 
 #include "my_allocator.h"
 
 
 using namespace std;
 unsigned long int num_allocations;
+
+
+
+void print_time_diff(struct timeval * tp1, struct timeval * tp2) {
+  /* Prints to stdout the difference, in seconds and museconds, between two
+     timevals. */
+
+  long sec = tp2->tv_sec - tp1->tv_sec;
+  long musec = tp2->tv_usec - tp1->tv_usec;
+  if (musec < 0) {
+    musec += 1000000;
+    sec--;
+  }
+  printf(" [sec = %ld, musec = %ld] ", sec, musec);
+
+}
+
+
+
 
 int ackerman(int a, int b) {
  /*
@@ -54,6 +74,61 @@ int ackerman(int a, int b) {
 }
 
 
+extern void ackerman_main() {
+  /* This is function repeatedly asks the user for the two parameters
+     "n" and "m" to pass to the ackerman function, and invokes the function.
+     Before and after the invocation of the ackerman function, the 
+     value of the wallclock is taken, and the elapsed time for the computation
+     of the ackerman function is output.
+  */
+
+  int n, m; /* Parameter for the invocation of the Ackerman function. */ 
+
+  struct timeval tp_start; /* Used to compute elapsed time. */
+  struct timeval tp_end;
+
+  for (;;) {
+
+    num_allocations = 0;
+
+    printf("\n");
+    printf("Please enter parameters n and m to ackerman function.\n");
+    printf("Note that this function takes a long time to compute,\n");
+    printf("even for small values. Keep n at or below 3, and mat or\n");
+    printf("below 8. Otherwise, the function takes seemingly forever.\n");
+    printf("Enter 0 for either n or m in order to exit.\n\n");
+
+    printf("  n = "); scanf("%d", &n);
+    if (!n) break;
+     printf("  m = "); scanf("%d", &m);
+    if (!m) break;
+
+    printf("      n = %d, m = %d\n", n, m);
+
+    assert(gettimeofday(&tp_start, 0) == 0);
+    /* Assert aborts if there is a problem with gettimeofday.
+       We rather die of a horrible death rather than returning
+       invalid timing information! 
+    */
+
+    int result = ackerman(n, m);
+
+    assert(gettimeofday(&tp_end, 0) == 0);
+    /* (see above) */
+
+    printf("Result of ackerman(%d, %d): %d\n", n, m, result); 
+
+    printf("Time taken for computation : "); 
+    print_time_diff(&tp_start, &tp_end);
+    printf("\n");
+
+    printf("Number of allocate/free cycles: %lu\n\n\n", num_allocations); 
+  }
+  
+  printf("Reached end of Ackerman program. Thank you for using it.\n");
+
+}
+
 
 int main(int argc, char ** argv) {
 
@@ -89,7 +164,8 @@ int main(int argc, char ** argv) {
 	cout << "b value: ";
 	cin >> b;
 	init_allocator(1024,64);
-	ackerman(a, b);
+	ackerman_main();
+	//ackerman(a, b);
 	cout << "bye" << endl;
 	/*
 	cout <<"initialize"<<endl;
