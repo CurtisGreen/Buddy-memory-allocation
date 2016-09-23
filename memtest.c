@@ -32,16 +32,31 @@ int main(int argc, char ** argv) {
 	}
 	cout <<"initialize"<<endl;
 	init_allocator(1024,64);
+	printlist();
 	cout <<"allocate 20"<<endl;
 	A = my_malloc(20);
+
+	//cout << "A buddy: " << ((node*)((void*)(((unsigned long)(A))^(((node*)(A-16))->size))-16))->free << " A size: " << ((node*)(A-16))->size << endl;
+
+
 	cout <<"allocate 20"<<endl;
 	B = my_malloc(20);
-	cout << "A address: " << A << endl;
-	cout << "B address: " << B << endl;
+	C = my_malloc(20);
+	//cout << "A address: " << (A-16) << endl;
+	//cout << "B address: " << (B-16) << endl;
 	
-	
-	
-	int i = 16;
+
+	//Test function
+	printlist();
+
+	//cout << "A buddy = " << ((void*)(((unsigned long)(A))^(((node*)(A-16))->size))-16)<<endl;
+	//cout << "B buddy = " << ((void*)(((unsigned long)(B))^(((node*)(B-16))->size))-16)<<endl;
+
+
+
+
+	//cout << "B buddy free = " << ((node*)(B-16))->free << endl;
+	/*int i = 16;
 	std::ostringstream os;
 	os << std::hex <<  i;
 	string k = os.str();
@@ -51,7 +66,8 @@ int main(int argc, char ** argv) {
 
 	int m = 0;
 	m = i ^ (int)C;
-	cout << "xor: " << m;
+	cout << "xor: " << m;*/
+
   // input parameters (basic block size, memory length)
 
   // init_allocator(basic block size, memory length)
