@@ -155,9 +155,12 @@ int release_allocator(){
 }
 
 extern int my_free(Addr _a) {
-  cout << endl << "-----------------my_free function----------" << endl;
-
+  cout << endl << "----my_free function------" << endl;
+  node* it = (node*)(_a-16);
+  cout << (int)((it)->size) << endl;
   node* buddy = (node*)((void*)(((unsigned long)(_a))^(((node*)(_a-16))->size))-16); 
+  
+  //cout << (int)(it-16)->size) << endl;
   cout << "its memory : " << _a-16 << endl;
   cout << "its buddy  : " << buddy <<endl;
   cout << "buddy size?: " << (int)((buddy)->size) << endl;
