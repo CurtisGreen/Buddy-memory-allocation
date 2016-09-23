@@ -151,6 +151,8 @@ extern Addr my_malloc(unsigned int _length) {
 
 int release_allocator(){
     //TODO: call free and make sure no more operations are allowed to be done
+	free(linked_list);
+	free(free_list);
 	return 0;
 }
 
@@ -177,7 +179,7 @@ extern int my_free(Addr _a) {
   else { 
 	free_node* search = free_head;
 	while (search->next->size != (int)((it)->size) ){	
-			search = search->next;
+		search = search->next;
 	}
 	search->down = it;
 	it->free =1;
@@ -192,7 +194,7 @@ extern int my_free(Addr _a) {
 }
 
 void printlist(){
-	cout << "~_~)b thx Curtis can i get you coffee bribe? "<< endl;
+	cout << "======== ~_~)b thx Curtis can i get you coffee bribe?======== "<< endl;
 	cout << "\nPrinting list\n" << endl;
 	free_node* free_head_temp = free_head;
 	node* node_temp;
