@@ -165,11 +165,23 @@ extern int my_free(Addr _a) {
   cout << "buddy size?: " << (int)((buddy)->size) << endl;
   cout << "buddy free?: " << (bool)((buddy)->free) << endl;
   
-  if ((bool)((buddy)->free) == 1) { // move pointer + free=1 + combine
-	  (it->next) = buddy;
+  if ((bool)((buddy)->free) == 1) { // // find its double size move pointer + free=1 + combine
+	free_node* search = free_head;
+	while (search->next->size != (int)((it)->size) ){	
+			search = search->next;
+	}
+	(it->next) = buddy;
+	search->down = it;
+	it->free = 1;
   }
-  // else // just free + move pointer
-  
+  else { 
+	free_node* search = free_head;
+	while (search->next->size != (int)((it)->size) ){	
+			search = search->next;
+	}
+	search->down = it;
+	it->free =1;
+  }
 // check ((node*)buddy->free) ?  ?_? buddy-16?	
   //assign pointer to given address
   //check if its buddy is free, find the buddy address using xor (and possibly bit shift>>) on the given address
