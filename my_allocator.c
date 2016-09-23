@@ -158,8 +158,8 @@ extern int my_free(Addr _a) {
 cout << endl << "----my_free function------" << endl;
   node* buddy = (node*)((void*)(((unsigned long)(_a))^(((node*)(_a-16))->size))-16);
   cout << "its buddy = " << buddy <<endl;
-    cout << (int)((buddy-i)->size) << endl;
-  
+  cout <<"buddy size?: " << (int)((buddy)->size) << endl;
+  cout << "buddy free?: " << (bool)((buddy)->free) << endl;
 // check ((node*)buddy->free) ?  ?_? buddy-16?	
   //assign pointer to given address
   //check if its buddy is free, find the buddy address using xor (and possibly bit shift>>) on the given address
