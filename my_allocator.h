@@ -28,9 +28,9 @@
 
 typedef struct node {
 	int size;
-	bool free;
 	struct node* next;
-};	//Not sure if needed
+	bool free;
+};
 
 typedef struct free_node{
 	int size;
