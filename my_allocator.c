@@ -22,29 +22,41 @@ int M,C;
 int numHeaders;
 
 unsigned int init_allocator(unsigned int _basic_block_size, unsigned int _length){
-	M = _basic_block_size;		// total memory
-	C = _length;				// the smallest (it will be used Addr my malloc)
+	M = _length;		// total memory
+	C = _basic_block_size;				// the smallest (it will be used Addr my malloc)
+	//cout << "in init" << endl;
 	numHeaders = (log((double)M)/log((double)2)-log((double)C)/log((double)2))+1; //5
+	//cout << "numHeaders" << numHeaders << endl;
 	linked_list = (char*)malloc(M);
+	//cout << "linkedlist" << endl;
 	free_list = (char*)malloc(numHeaders*20);
+	//cout << "freelist" << endl;
 	head = (node*)linked_list;
+	//cout << "linkedhead" << endl;
 	free_head = (free_node*)(free_list+(numHeaders-1)*20);
+	//cout << "freehead" << endl;
 	free_node* p = free_head;
 	//free_node* free_tail = free_head;
 	p->size = C;
+	//cout << "m = " << M << endl;
 
-	
+	//cout << "numHeaders = " << numHeaders << endl;
 	for (int i =0; i < numHeaders-1; ++i) {	//Free list
-		p = free_head-20;	//Might be wrong
+		//cout << "infreelistloop, i = " << i << endl;
+		p = (free_head-1);	//Might be wrong
+		//cout << "moved head back" << endl;
 		p->next = free_head;
+		//cout << "assigned node" << endl;
 		p->size = p->next->size*2;
+		//cout << "assigned size" << endl;
 		free_head = p;
+		//cout << "moved head to front" << endl;
 		/* I think we need to insert two nodes here undert p, 
 		if we do not insert two nodes, then p->down node is always null*/
 	}
-
+	//cout << "made freelist" << endl;
 	free_head->down = head;
-	head->size = 1024;
+	head->size = M;
 	head->free = true;
 	cout << "succesfully initialized" << endl;
 }	
@@ -70,15 +82,23 @@ char* split(free_node* p){
 				//cout << "Buddy 1 address = " << (buddy1) << " buddy 2 address = " << (buddy2) << endl;
 				buddy1->free = true;
 				buddy2->free = true;
+				//cout << buddy1->free << buddy2->free << endl;
 				search->down = search->down->next;
 
 				search = search->next;
 				search->down = buddy1;
 				buddy1->next = buddy2;
+				cout << "buddy2's next" <<  (unsigned long)((void*)buddy2->next) << endl;
+				if ((unsigned long)((void*)buddy2->next) > 0x800000000000){
+					//cout << "in weird " << endl;
+					buddy2->next = NULL;
+				}
 			}
 			node* ret_node = search->down;
 			search->down = search->down->next;    //Set to next down node
 			ret_node->free = false;
+			ret_node->next = NULL;
+			//cout << ret_node->free << endl;
 			return (char*)ret_node + 16;
 		}
 		else{
@@ -107,6 +127,8 @@ extern Addr my_malloc(unsigned int _length) {
 	    	    p->down = p->down->next;    //Set to next down node
 	    	    //cout << ret_node->free << endl;
 				ret_node->free = false;
+				ret_node->next = NULL;
+				//cout << "bool " << ret_node->free;
 	    	    return (char*)ret_node + 16;
 			}
 			else{
@@ -119,6 +141,8 @@ extern Addr my_malloc(unsigned int _length) {
 				node* ret_node = p->down;
 	    	    p->down = p->down->next;    //Set to next down node
 	    	    ret_node->free = false;
+				ret_node->next = NULL;
+				//cout << "bool " << ret_node->free;
 				return (char*)ret_node + 16;
 	    	}
 	    	else{    //No free space
@@ -134,6 +158,8 @@ extern Addr my_malloc(unsigned int _length) {
 				node* ret_node = p->down;
 				p->down = p->down->next;    //Set to next down node
 				ret_node->free = false;
+				//cout << "bool " << ret_node->free;
+				ret_node->next = NULL;
 				return (char*)ret_node + 16;
 			}
 			else{
@@ -143,7 +169,6 @@ extern Addr my_malloc(unsigned int _length) {
 	}
 	else{
 	    printf("The length provided is too large to store data in");
-	    return NULL; // hoho
 	}
 }
 
@@ -152,50 +177,73 @@ extern Addr my_malloc(unsigned int _length) {
 
 
 int release_allocator(){
-	 free(linked_list);
-	free(free_list);
+	free(linked_list);
+	//cout << "freed linked_list" << endl;
+	//free(((char*)free_head));
+	//cout << "freed free_list =" << endl;
     //TODO: call free and make sure no more operations are allowed to be done
 	return 0;
 }
 
 extern int my_free(Addr _a) {
   cout << endl << "----my_free function------" << endl;
+  //printlist();
+  //cout << "right before node define" << endl;
   node* it = (node*)(_a-16);
-  node* buddy = (node*)((void*)(((unsigned long)(_a))^(((node*)(_a-16))->size))-16); 
-  /*
+  
+  //comment graveyard:
+  //cout << "defined node" << endl;
+  //node* buddy;
+  //cout << "created node it "<< (*(int*)((char*)_a-16)) << " " << (*(bool*)((char*)_a-4)) << endl;
+  //node* buddy = (node*)((void*)(((unsigned long)(_a))^(((node*)(_a-16))->size))-16); 
+  //node* buddy = (node*)(((_a)-((void*)(head))^((it->size)+((void*)(head)))));
+  //unsigned long test = (unsigned long)((it->size) + ((void*)head));
+  
+  unsigned long test2 = ((unsigned long)(_a)- (unsigned long)((void*)head));
+  node* buddy = (node*)((void*)((test2^(it->size))+ (unsigned long)((void*)head))-16);
+
+  
   cout << "its size   : " << (int)((it)->size) << endl;
   cout << "its memory : " << _a-16 << endl;
   cout << "its buddy  : " << buddy <<endl;
-  cout << "buddy size?: " << (int)((buddy)->size) << endl;
-  cout << "buddy free?: " << (bool)((buddy)->free) << endl;
-  */
-  if ((bool)((buddy)->free)) { // // find its double size move pointer + free=1 + combine
+  cout << "buddy size?: " << ((buddy)->size) << endl;
+  cout << "buddy free?: " << ((buddy)->free) << endl;
+  
+  if ((bool)((buddy)->free)== true && buddy->size == it->size) { // // find its double size move pointer + free=1 + combine
 	//cout << "buddy is free" << endl;
 	free_node* search = free_head;
-	while (search->next->size != (int)((it)->size) ){	
+	while (search->size != (it)->size){	
 			search = search->next;
 	}
 	//cout << "found header" << endl;
+	node* node_search = search->down;
+	cout << node_search << " " << buddy << endl;
+	if (node_search == buddy){	//buddy is at the front
+		//cout << "buddy first in list" << buddy->next << endl;
+		search->down = node_search->next;
+	}
+	else{
+		cout << "buddy not first in list " << node_search << endl;
+		while(node_search != NULL && node_search->next != buddy){	//disconnect from list
+			cout << node_search << endl;
+			node_search = node_search->next;
+		}
+		cout << node_search << endl;
+		if (node_search!= NULL && node_search->next == buddy){
+			node_search->next = node_search->next->next;
+		}
+	}
+	
 	if (it < buddy){
 		it->size = it->size*2;
-		//cout << "buddy is first" << endl;
+		//cout << "buddy is second" << endl;
 	}
 	else{
 		buddy->size = buddy->size*2;
 		it = buddy;
-		//cout << "buddy second" << endl;
+		//cout << "buddy first" << endl;
 	}
-	node* node_search = search->down;
-	while(node_search != NULL){
-		node_search = node_search->next;
-	}
-	if (node_search != NULL){
-		node_search->next = it;
-	}
-	else{
-		search->down = it;
-	}
-	search->next->down = search->next->down->next;
+	
 	it->free = true;
 	it->next = NULL;
 	my_free(((char*)it+16));
@@ -210,14 +258,19 @@ extern int my_free(Addr _a) {
 	}
 	//cout << "found header" << endl;
 	node_search = search->down;
-	cout << search->size << endl;
-	while(node_search != NULL){
-		node_search = node_search->next;
-	}
-	if (node_search != NULL){
+	//cout << search->size << endl;
+	if (node_search != NULL && ((unsigned long)((char*)node_search)) < 0x800000000000){
+		//cout << "in if " << node_search << endl;
+		while(node_search->next != NULL){
+			//cout << "in while" << endl;
+			node_search = node_search->next;
+		}
+		//cout << " out of while " << endl;
 		node_search->next = it;
+		//cout << "node has been pointed to" << endl;
 	}
 	else{
+		//cout << "in else" << endl;
 		search->down = it;
 	}
 	//search->next->down = search->next->down->next;
@@ -225,7 +278,8 @@ extern int my_free(Addr _a) {
 	it->free = true;
 	it->next = NULL;
   }
-// check ((node*)buddy->free) ?  ?_? buddy-16?	
+  
+  
   //assign pointer to given address
   //check if its buddy is free, find the buddy address using xor (and possibly bit shift>>) on the given address
   //If it's free, combine it and call my_free() using this new block (this recursively combines blocks)
@@ -235,7 +289,6 @@ extern int my_free(Addr _a) {
 }
 
 void printlist(){
-	cout << "~_~)b thx Curtis can i get you coffee bribe? "<< endl;
 	cout << "\nPrinting list\n" << endl;
 	free_node* free_head_temp = free_head;
 	node* node_temp;
