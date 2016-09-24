@@ -159,14 +159,11 @@ int main(int argc, char ** argv) {
 		}
 	}
 
-	cout << "a value: ";
-	cin >> a;
-	cout << "b value: ";
-	cin >> b;
 	init_allocator(1024,64);
+
 	ackerman_main();
-	//ackerman(a, b);
-	cout << "bye" << endl;
+  	release_allocator();
+  	cout << "bye" << endl;
 	/*
 	cout <<"initialize"<<endl;
 	init_allocator(1024,64);
@@ -203,8 +200,7 @@ int main(int argc, char ** argv) {
 
   // init_allocator(basic block size, memory length)
 
-  //ackerman_main();
+  
 */
   
-  // release_allocator()
 }
